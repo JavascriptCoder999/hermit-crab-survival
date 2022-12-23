@@ -1,5 +1,4 @@
 info.onCountdownEnd(function () {
-    info.stopCountdown()
     game.splash("Controls:")
     game.splash("Use arrows or wasd to move,")
     game.splash("Use A to pick up objects")
@@ -7,32 +6,93 @@ info.onCountdownEnd(function () {
     game.splash("Objective:")
     game.splash("Survive a week in the wild")
     game.splash("As a HERMIT CRAB!")
+    game.splash("Day 1: Get Food", "Gain at least 1000 points in 25 seconds")
+    info.startCountdown(30)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
-    score += randint(50, 100)
-    otherSprite.destroy()
+    mySprite2.setStayInScreen(true)
+    if (controller.A.isPressed()) {
+        mySprite2.startEffect(effects.disintegrate, 2000)
+        info.changeScoreBy(randint(50, 100))
+        music.playSoundEffect(music.createSoundEffect(WaveShape.Square, 400, 600, 255, 0, 100, SoundExpressionEffect.None, InterpolationCurve.Linear), SoundExpressionPlayMode.UntilDone)
+        pause(1000)
+        mySprite2.setPosition(randint(0, 160), randint(10, 110))
+        effects.clearParticles(mySprite2)
+        mySprite2.setImage(img`
+            ..........bbbbbb................
+            .......bbb444444bb..............
+            .....2244444ddd444b.............
+            ....244444444dddd44e............
+            ...244444444444ddd4be...........
+            ..244444444444444d44be..........
+            .2b444444444444444d4be..........
+            .2b44444444444444444bbe.........
+            2bbb4444444444444444bbe.........
+            2bbb4444444444444444bbe.........
+            2bb4b4444444444444444bbe........
+            2bb4444444444444444444be........
+            2bb44444444444444444444e........
+            2bbb444bbb4444444444444e........
+            22bbb444bb4bb444444444be........
+            .2bbbbb44bbbb44444444bbe........
+            .22bbbbbbbb44bbb444444bbe.......
+            ..eeebbbbbbb44bbb444444be.......
+            ...eeeeebbbbbbbb44b4444be.......
+            .....eeeeee222bb44bbb4bbe.......
+            .......eeeee222bb44bbbbee.......
+            ............e222bbbbbbbec.......
+            ..............ee2bbbbeebdb......
+            .................eeeeecdddb.....
+            .......................cd11bbbb.
+            ........................cd111dbb
+            .........................b11111c
+            .........................c11dd1c
+            .........................cd1dbc.
+            .........................cb11c..
+            ..........................ccc...
+            ................................
+            `)
+    }
 })
-let score = 0
-let mySprite2 = sprites.create(img`
-    . . . . . . . . . . . . . . . . 
-    . . . . . . . . c c c c . . . . 
-    . . . . . . c c d d d d c . . . 
-    . . . . . c c c c c c d c . . . 
-    . . . . c c 4 4 4 4 d c c . . . 
-    . . . c 4 d 4 4 4 4 4 1 c . c c 
-    . . c 4 4 4 1 4 4 4 4 d 1 c 4 c 
-    . c 4 4 4 4 1 4 4 4 4 4 1 c 4 c 
-    f 4 4 4 4 4 1 4 4 4 4 4 1 4 4 f 
-    f 4 4 4 f 4 1 c c 4 4 4 1 f 4 f 
-    f 4 4 4 4 4 1 4 4 f 4 4 d f 4 f 
-    . f 4 4 4 4 1 c 4 f 4 d f f f f 
-    . . f f 4 d 4 4 f f 4 c f c . . 
-    . . . . f f 4 4 4 4 c d b c . . 
-    . . . . . . f f f f d d d c . . 
-    . . . . . . . . . . c c c . . . 
+let mySprite2: Sprite = null
+info.setLife(3)
+mySprite2 = sprites.create(img`
+    ..........bbbbbb................
+    .......bbb444444bb..............
+    .....2244444ddd444b.............
+    ....244444444dddd44e............
+    ...244444444444ddd4be...........
+    ..244444444444444d44be..........
+    .2b444444444444444d4be..........
+    .2b44444444444444444bbe.........
+    2bbb4444444444444444bbe.........
+    2bbb4444444444444444bbe.........
+    2bb4b4444444444444444bbe........
+    2bb4444444444444444444be........
+    2bb44444444444444444444e........
+    2bbb444bbb4444444444444e........
+    22bbb444bb4bb444444444be........
+    .2bbbbb44bbbb44444444bbe........
+    .22bbbbbbbb44bbb444444bbe.......
+    ..eeebbbbbbb44bbb444444be.......
+    ...eeeeebbbbbbbb44b4444be.......
+    .....eeeeee222bb44bbb4bbe.......
+    .......eeeee222bb44bbbbee.......
+    ............e222bbbbbbbec.......
+    ..............ee2bbbbeebdb......
+    .................eeeeecdddb.....
+    .......................cd11bbbb.
+    ........................cd111dbb
+    .........................b11111c
+    .........................c11dd1c
+    .........................cd1dbc.
+    .........................cb11c..
+    ..........................ccc...
+    ................................
     `, SpriteKind.Food)
+mySprite2.setStayInScreen(false)
 info.setScore(0)
-tiles.setWallAt(tiles.getTileLocation(0, 0), true)
+scaling.scaleByPercent(mySprite2, -50, ScaleDirection.Uniformly, ScaleAnchor.Middle)
 let mySprite = sprites.create(img`
     . . . . . . . . . . . c c . . . 
     . . . . . . . c c c c 6 3 c . . 
@@ -51,8 +111,8 @@ let mySprite = sprites.create(img`
     c 5 5 5 5 c 5 5 5 5 c 4 c 5 c . 
     . c c c c c c c c c . . c c c . 
     `, SpriteKind.Player)
+mySprite.setBounceOnWall(true)
 mySprite.setStayInScreen(true)
-controller.moveSprite(mySprite, 65, 65)
 tiles.setCurrentTilemap(tilemap`level2`)
 mySprite.setPosition(77, 108)
 pause(1000)
@@ -65,28 +125,45 @@ info.startCountdown(3)
 music.playSoundEffect(music.createSoundEffect(WaveShape.Noise, 5000, 1, 255, 0, 3000, SoundExpressionEffect.Warble, InterpolationCurve.Curve), SoundExpressionPlayMode.InBackground)
 forever(function () {
     if (mySprite.isHittingTile(CollisionDirection.Left)) {
-        scene.cameraShake(8, 500)
+        scene.cameraShake(randint(0, 8), 500)
         tiles.setCurrentTilemap(tilemap`level1`)
     }
 })
 forever(function () {
     if (mySprite.isHittingTile(CollisionDirection.Right)) {
-        scene.cameraShake(8, 100)
+        scene.cameraShake(randint(0, 8), 100)
         tiles.setCurrentTilemap(tilemap`level2`)
     }
 })
 forever(function () {
     if (mySprite.isHittingTile(CollisionDirection.Bottom)) {
-        scene.cameraShake(8, 100)
+        scene.cameraShake(randint(0, 8), 100)
         tiles.setCurrentTilemap(tilemap`level3`)
     }
 })
 forever(function () {
     scene.cameraFollowSprite(mySprite)
+    controller.moveSprite(mySprite, 65, 65)
 })
 forever(function () {
     if (mySprite.isHittingTile(CollisionDirection.Top)) {
-        scene.cameraShake(8, 10)
+        scene.cameraShake(randint(0, 8), 10)
         tiles.setCurrentTilemap(tilemap`level4`)
+    }
+})
+forever(function () {
+    if (info.countdown() == 5) {
+        if (info.score() > 1000) {
+            game.splash("Day 1 complete!")
+            game.splash("Day 2: i will fill this in soon")
+        } else if (info.score() < 1000) {
+            game.splash("Day 1 incomplete. YOU LOSE!")
+            info.changeLifeBy(-1)
+        }
+    }
+})
+forever(function () {
+    if (info.life() == 0) {
+        game.over(false)
     }
 })

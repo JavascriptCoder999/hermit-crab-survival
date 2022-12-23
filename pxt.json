@@ -2,7 +2,8 @@
     "name": "Hermit Crab Survival",
     "description": "",
     "dependencies": {
-        "device": "*"
+        "device": "*",
+        "sprite-scaling": "*"
     },
     "files": [
         "main.blocks",
