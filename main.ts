@@ -8,6 +8,30 @@ info.onCountdownEnd(function () {
     game.splash("Survive a week in the wild")
     game.splash("As a HERMIT CRAB!")
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
+    score += randint(50, 100)
+    otherSprite.destroy()
+})
+let score = 0
+let mySprite2 = sprites.create(img`
+    . . . . . . . . . . . . . . . . 
+    . . . . . . . . c c c c . . . . 
+    . . . . . . c c d d d d c . . . 
+    . . . . . c c c c c c d c . . . 
+    . . . . c c 4 4 4 4 d c c . . . 
+    . . . c 4 d 4 4 4 4 4 1 c . c c 
+    . . c 4 4 4 1 4 4 4 4 d 1 c 4 c 
+    . c 4 4 4 4 1 4 4 4 4 4 1 c 4 c 
+    f 4 4 4 4 4 1 4 4 4 4 4 1 4 4 f 
+    f 4 4 4 f 4 1 c c 4 4 4 1 f 4 f 
+    f 4 4 4 4 4 1 4 4 f 4 4 d f 4 f 
+    . f 4 4 4 4 1 c 4 f 4 d f f f f 
+    . . f f 4 d 4 4 f f 4 c f c . . 
+    . . . . f f 4 4 4 4 c d b c . . 
+    . . . . . . f f f f d d d c . . 
+    . . . . . . . . . . c c c . . . 
+    `, SpriteKind.Food)
+info.setScore(0)
 tiles.setWallAt(tiles.getTileLocation(0, 0), true)
 let mySprite = sprites.create(img`
     . . . . . . . . . . . c c . . . 
@@ -41,16 +65,19 @@ info.startCountdown(3)
 music.playSoundEffect(music.createSoundEffect(WaveShape.Noise, 5000, 1, 255, 0, 3000, SoundExpressionEffect.Warble, InterpolationCurve.Curve), SoundExpressionPlayMode.InBackground)
 forever(function () {
     if (mySprite.isHittingTile(CollisionDirection.Left)) {
+        scene.cameraShake(8, 500)
         tiles.setCurrentTilemap(tilemap`level1`)
     }
 })
 forever(function () {
     if (mySprite.isHittingTile(CollisionDirection.Right)) {
+        scene.cameraShake(8, 100)
         tiles.setCurrentTilemap(tilemap`level2`)
     }
 })
 forever(function () {
     if (mySprite.isHittingTile(CollisionDirection.Bottom)) {
+        scene.cameraShake(8, 100)
         tiles.setCurrentTilemap(tilemap`level3`)
     }
 })
@@ -59,6 +86,7 @@ forever(function () {
 })
 forever(function () {
     if (mySprite.isHittingTile(CollisionDirection.Top)) {
+        scene.cameraShake(8, 10)
         tiles.setCurrentTilemap(tilemap`level4`)
     }
 })
