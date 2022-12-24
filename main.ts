@@ -6,8 +6,19 @@ info.onCountdownEnd(function () {
     game.splash("Objective:")
     game.splash("Survive a week in the wild")
     game.splash("As a HERMIT CRAB!")
-    game.splash("Day 1: Get Food", "Gain at least 1000 points in 25 seconds")
-    info.startCountdown(30)
+    game.splash("Day 1: Get Food", "Gain at least 1000 points in " + "30 " + "seconds")
+    info.changeCountdownBy(30)
+})
+info.onScore(100, function () {
+    while (info.countdown() == 5) {
+        if (info.score() > 1000) {
+            game.splash("Day 1 complete!")
+            game.splash("Day 2: i will fill this in soon")
+        } else if (info.score() < 1000) {
+            game.splash("Day 1 incomplete. YOU LOSE!")
+            info.changeLifeBy(-1)
+        }
+    }
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     mySprite2.setStayInScreen(true)
@@ -55,6 +66,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
     }
 })
 let mySprite2: Sprite = null
+let _25 = 0
 info.setLife(3)
 mySprite2 = sprites.create(img`
     ..........bbbbbb................
@@ -152,18 +164,8 @@ forever(function () {
     }
 })
 forever(function () {
-    if (info.countdown() == 5) {
-        if (info.score() > 1000) {
-            game.splash("Day 1 complete!")
-            game.splash("Day 2: i will fill this in soon")
-        } else if (info.score() < 1000) {
-            game.splash("Day 1 incomplete. YOU LOSE!")
-            info.changeLifeBy(-1)
-        }
-    }
-})
-forever(function () {
     if (info.life() == 0) {
         game.over(false)
     }
+    _25 = 25
 })
