@@ -1,5 +1,5 @@
  
-
+THIS GAME IS ABANDONED, FOR MORE INFORMATION: https://github.com/JavascriptCoder999/hermit-crab-survival/issues/5
 
 > Open this page at [https://javascriptcoder999.github.io/hermit-crab-survival/](https://javascriptcoder999.github.io/hermit-crab-survival/)
 
